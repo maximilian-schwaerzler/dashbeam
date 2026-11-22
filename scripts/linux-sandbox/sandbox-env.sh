@@ -37,7 +37,8 @@ default_binary() {
 	die "no DashBeam build found; run: pnpm tauri build --debug --no-bundle (or pass --binary)"
 }
 
-# Create the sandbox tree, a persistent device identity and sample files.
+# Create the sandbox tree and sample files. The device identity needs no
+# setup: DashBeam generates its own identity.key in the sandbox data folder.
 sandbox_init() {
 	case "$SANDBOX_DIR" in
 	/*) ;;
@@ -54,14 +55,6 @@ sandbox_init() {
 		"$SANDBOX_DIR/home/.cache" \
 		"$SANDBOX_DIR/runtime"
 	chmod 700 "$SANDBOX_DIR/runtime"
-
-	# A fixed identity per sandbox, so pairing survives restarts. Passing it via
-	# IROH_SECRET also stops a fresh data directory from adopting the identity
-	# an installed DashBeam left in the system keyring (secret_store.rs).
-	if [ ! -s "$SANDBOX_DIR/identity.hex" ]; then
-		od -An -tx1 -N32 /dev/urandom | tr -d ' \n' >"$SANDBOX_DIR/identity.hex"
-		chmod 600 "$SANDBOX_DIR/identity.hex"
-	fi
 
 	# Names that tend to break shell scripts.
 	local files="$SANDBOX_DIR/home/Test files"
@@ -96,8 +89,6 @@ sandbox_export_env() {
 	export XDG_CACHE_HOME="$HOME/.cache"
 	# Own runtime dir: no shared dconf, document portal or control sockets.
 	export XDG_RUNTIME_DIR="$SANDBOX_DIR/runtime"
-	export IROH_SECRET
-	IROH_SECRET="$(cat "$SANDBOX_DIR/identity.hex")"
 
 	# A Flatpak or AppImage in the real session must not leak in.
 	unset FLATPAK_ID APPIMAGE APPDIR DBUS_SESSION_BUS_ADDRESS

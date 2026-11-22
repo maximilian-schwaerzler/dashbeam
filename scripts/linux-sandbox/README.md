@@ -6,7 +6,7 @@ each other. Each sandbox gets its own:
 | Shared by default | Isolated by |
 | --- | --- |
 | Settings, history, WebKit data (`~/.local/share/com.dashbeam.desktop`) | own `HOME` and XDG directories |
-| Device identity (an installed DashBeam's old keyring entry would be adopted) | `IROH_SECRET`, generated once per sandbox |
+| Device identity (`identity.key` in that data folder) | own data folder, so the sandbox generates its own |
 | Single-instance lock (a test launch would go to your running DashBeam) | own D-Bus session |
 | Nautilus scripts folder (same script name and marker) | own `XDG_DATA_HOME`, plus its own Nautilus process |
 | Runtime sockets, dconf, document portal | own `XDG_RUNTIME_DIR` |
