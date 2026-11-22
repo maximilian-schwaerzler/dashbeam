@@ -94,6 +94,8 @@ Notes:
 
 To exercise transfers on a single machine, install the [Sendme CLI](https://www.iroh.computer/sendme) and share files locally — traffic stays on your device.
 
+To test the Linux desktop app next to an installed DashBeam (separate settings, identity and Nautilus), see [`scripts/linux-sandbox`](scripts/linux-sandbox/README.md).
+
 Engine E2E tests:
 
 ```bash
